@@ -20,8 +20,8 @@ var commentRoutes       = require("./routes/comments"),
     indexRoutes         = require("./routes/index")
 
 mongoose.Promise = global.Promise;
-mongoose.connect(process.env.DATABASEURL, {useMongoClient: true});
-// mongoose.connect("mongodb://Tuomas:password@ds247317.mlab.com:47317/yelpcampproject", {useMongoClient: true});
+var url = process.env.DATABASEURL || "mongodb://localhost/yelp_camp_v15"
+mongoose.connect(url, {useMongoClient: true});
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
