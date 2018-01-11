@@ -8,6 +8,7 @@ var nodemailer = require("nodemailer");
 var crypto = require("crypto");
 
 
+
 // Root route
 router.get("/", function(req, res){
    res.render("landing"); 
