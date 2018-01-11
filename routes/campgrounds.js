@@ -56,6 +56,7 @@ router.post("/", middleware.isLoggedIn, function(req, res){
         }
     });
 });
+});
 
 //NEW - show form to create new campground
 router.get("/new", middleware.isLoggedIn, function(req, res){
@@ -90,8 +91,11 @@ router.get("/:id/edit", middleware.checkCampgroundOwnership, function(req, res){
 
 // UPDATE CAMPGROUND ROUTE
 router.put("/:id", middleware.checkCampgroundOwnership, function(req, res){
- 
-    var newData = {name: req.body.name, image: req.body.image, description: req.body.description, price: req.body.price};
+ geocoder.geocode(req.body.location, function (err, data) {
+    var lat = data.results[0].geometry.location.lat;
+    var lng = data.results[0].geometry.location.lng;
+    var location = data.results[0].formatted_address;
+    var newData = {name: req.body.name, image: req.body.image, description: req.body.description, price: req.body.price, location: location, lat: lat, lng: lng};
     Campground.findByIdAndUpdate(req.params.id, {$set: newData}, function(err, campground){
         if(err){
             req.flash("error", err.message);
@@ -102,7 +106,7 @@ router.put("/:id", middleware.checkCampgroundOwnership, function(req, res){
         }
     });
   });
-
+});
 // DESTROY CAMPGROUND ROUTE
 router.delete("/:id", middleware.checkCampgroundOwnership, function(req, res){
     Campground.findByIdAndRemove(req.params.id, function(err){
